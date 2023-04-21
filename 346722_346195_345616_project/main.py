@@ -36,7 +36,7 @@ def main(args):
     # Make a validation set (it can overwrite xtest, ytest)
     if not args.test:
         # We use 30% of our training set to make our validation set
-        k = 0.3 * xtrain.shape[0]
+        k = int(0.3 * xtrain.shape[0])
         random_idx = np.random.permutation(xtrain.shape[0])[:k]
         # Use these index to extract our validation set from the training set
         xtest = xtrain[random_idx[:k]]
