@@ -36,6 +36,7 @@ def main(args):
         pass
     
     ### WRITE YOUR CODE HERE to do any other data processing
+    ## append.biad dans utils et normalize 
 
 
     # Dimensionality reduction (FOR MS2!)
