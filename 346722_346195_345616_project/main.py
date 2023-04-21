@@ -30,9 +30,18 @@ def main(args):
     ## 2. Then we must prepare it. This is were you can create a validation set,
     #  normalize, add bias, etc.
 
+    
+
     # Make a validation set (it can overwrite xtest, ytest)
     if not args.test:
-        ### WRITE YOUR CODE HERE
+        # We use 30% of our training set to make our validation set
+        k = 0.3 * xtrain.shape[0]
+        random_idx = np.random.permutation(xtrain.shape[0])[:k]
+        # Use these index to extract our validation set from the training set
+        xtest = xtrain[random_idx[:k]]
+        ytest = ytrain[random_idx[:k]]
+        xtrain = xtrain[random_idx[k:]]
+        ytrain = ytrain[random_idx[k:]]
         pass
     
     ### WRITE YOUR CODE HERE to do any other data processing
@@ -53,15 +62,15 @@ def main(args):
     if args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
 
-    # Kmeans call
+    # KMeans call
     elif args.method == "kmeans":
         method_obj =  KMeans(K= args.K, max_iters= args.max_iters)
 
-    # logistic regression call
+    # Logistic regression call
     elif args.method == "logistic_regression":
         method_obj =  LogisticRegression(lr= args.lr, max_iters= args.max_iters)
 
-    # svm call
+    # SVM call
     elif args.method == "svm":
         method_obj =  SVM(C= args.svm_c, kernel= args.svm_kernel, gamma= args.svm_gamma, degree= args.svm_degree, coef0= args.svm_coef0)
     
