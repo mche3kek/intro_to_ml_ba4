@@ -33,7 +33,7 @@ class LogisticRegression(object):
             pred_labels (array): target of shape (N,)
         """
         D = training_data.shape[1]  # number of features
-        C = training_labels.shape[1]  # number of classes
+        C = get_n_classes(training_labels)  # number of classes
         # Random initialization of the weights
         self.weights = np.random.normal(0, 0.1, (D, C))
         for it in range(self.max_iters):
