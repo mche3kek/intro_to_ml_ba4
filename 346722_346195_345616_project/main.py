@@ -30,7 +30,8 @@ def main(args):
     ## 2. Then we must prepare it. This is were you can create a validation set,
     #  normalize, add bias, etc.
 
-    
+    xtrain = normalize_fn(xtrain, np.mean(xtrain, axis=0), np.std(xtrain, axis=0))
+    xtrain = append_bias_term(xtrain)
 
     # Make a validation set (it can overwrite xtest, ytest)
     if not args.test:
@@ -42,9 +43,6 @@ def main(args):
         ytest = ytrain[random_idx[:k]]
         xtrain = xtrain[random_idx[k:]]
         ytrain = ytrain[random_idx[k:]]
-        pass
-    
-    ### WRITE YOUR CODE HERE to do any other data processing
 
 
     # Dimensionality reduction (FOR MS2!)
