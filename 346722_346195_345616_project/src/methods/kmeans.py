@@ -34,10 +34,9 @@ class KMeans(object):
 
         # We define K as the number of our clusters
         K = self.K
-
         # 1) Initialize the centers :
         # Select the first K random index
-        random_idx = np.random.permutation(data.shape[0])[:K]
+        random_idx = np.random.permutation(data.T.shape[0])
         # Use these index to select centers from data
         centers = data[random_idx[:K]]
 
@@ -47,7 +46,7 @@ class KMeans(object):
             old_centers = centers.copy()  
 
             # We assign each data to its corresponding cluster
-            cluster_assignments = self.assign_cluster(data)
+            cluster_assignments = self.assign_cluster(data, centers)
 
             # We compute the new centers 
             for k in range(K):
@@ -81,12 +80,10 @@ class KMeans(object):
         for i in range(len(centers)):
             label = np.argmax(np.bincount(training_labels[cluster_assignments == i]))
             cluster_center_label[i] = label
-    
-        # We assign each data to its corresponding cluster
-        cluster_assignments = self.assign_cluster(training_data)
 
-        # Convert cluster index to label
-        self.new_labels = cluster_center_label[cluster_assignments]
+        # We save our centers and our cluster to label mapping to use them for future data
+        self.centers = centers
+        self.cluster_center_label = cluster_center_label
 
         return self.predict(training_data)
 
@@ -104,11 +101,14 @@ class KMeans(object):
         """
 
         # We assign each data to its corresponding cluster
-        pred_labels = self.assign_cluster(test_data)
-        
+        cluster_assignments = self.assign_cluster(test_data, self.centers)
+
+        # We convert cluster index to label
+        pred_labels = self.cluster_center_label[cluster_assignments]
+
         return pred_labels
     
-    def assign_cluster(self, data):
+    def assign_cluster(self, data, centers):
         """
         Computes the Euclidean distance of each data to the clusters and assign it to the corresponding one.
         
@@ -126,7 +126,7 @@ class KMeans(object):
         distances = np.zeros((N, K))
         for k in range(K):
             # Compute the euclidean distance for each data to each center
-            center = self.new_labels[k]
+            center = centers[k]
             distances[:, k] = np.sqrt(((data - center) ** 2).sum(axis=1))
 
         # We assign each data to its closest cluster 
