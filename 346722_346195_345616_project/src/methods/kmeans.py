@@ -31,11 +31,6 @@ class KMeans(object):
             centers (array): shape (K,D), the final cluster centers.
             cluster_assignments (array): shape (N,) final cluster assignment for each data point.
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
 
         # We define N and K as the size of our data set and of our clusters respectively
         N = data.shape[0]
@@ -85,11 +80,6 @@ class KMeans(object):
         Returns:
             pred_labels (array): labels of shape (N,)
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
 
         # We define N and K as the size of our data set and of our clusters respectively
         N = training_data.shape[0]
@@ -129,11 +119,6 @@ class KMeans(object):
         Returns:
             pred_labels (np.array): labels of shape (N,)
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
 
         # We define N and K as the size of our data set and of our clusters respectively
         N = test_data.shape[0]
