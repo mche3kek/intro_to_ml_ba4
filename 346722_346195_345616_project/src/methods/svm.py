@@ -31,11 +31,11 @@ class SVM(object):
         # We initialise our svm using SVC and giving the corresponding parameters to the given kernel
         match kernel:
             case 'linear':
-                self.svm = SVC(C, kernel)
+                self.svm = SVC(C= C, kernel= kernel)
             case 'rbf':
-                self.svm = SVC(C, kernel, gamma=gamma)
+                self.svm = SVC(C= C, kernel = kernel, gamma=gamma)
             case 'poly':
-                self.svm = SVC(C, kernel, degree, gamma, coef0)
+                self.svm = SVC(C= C, kernel= kernel, degree= degree, gamma= gamma, coef0= coef0)
                 
         
     def fit(self, training_data, training_labels):
