@@ -36,7 +36,6 @@ def main(args):
         pass
     
     ### WRITE YOUR CODE HERE to do any other data processing
-    ## append.biad dans utils et normalize 
 
 
     # Dimensionality reduction (FOR MS2!)
@@ -54,8 +53,17 @@ def main(args):
     if args.method == "dummy_classifier":
         method_obj =  DummyClassifier(arg1=1, arg2=2)
 
-    elif ...:  ### WRITE YOUR CODE HERE
-        pass
+    # Kmeans call
+    elif args.method == "kmeans":
+        method_obj =  KMeans(K= args.K, max_iters= args.max_iters)
+
+    # logistic regression call
+    elif args.method == "logistic_regression":
+        method_obj =  LogisticRegression(lr= args.lr, max_iters= args.max_iters)
+
+    # svm call
+    elif args.method == "svm":
+        method_obj =  SVM(C= args.svm_c, kernel= args.svm_kernel, gamma= args.svm_gamma, degree= args.svm_degree, coef0= args.svm_coef0)
     
 
     ## 4. Train and evaluate the method
