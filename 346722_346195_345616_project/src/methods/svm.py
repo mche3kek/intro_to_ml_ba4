@@ -23,11 +23,20 @@ class SVM(object):
             degree (int): degree in polynomial SVM method
             coef0 (float): coef0 in polynomial SVM method
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+
+        # Here we check that our parameter gamma is greater than 0, if it isn't we take the default value
+        if (gamma < 0) :
+            gamma = 1.
+
+        # We initialise our svm using SVC and giving the corresponding parameters to the given kernel
+        match kernel:
+            case 'linear':
+                self.svm = SVC(C, kernel)
+            case 'rbf':
+                self.svm = SVC(C, kernel, gamma=gamma)
+            case 'poly':
+                self.svm = SVC(C, kernel, degree, gamma, coef0)
+                
         
     def fit(self, training_data, training_labels):
         """
@@ -39,11 +48,8 @@ class SVM(object):
         Returns:
             pred_labels (array): target of shape (N,)
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+        # We train our svm
+        self.svm.fit(training_data, training_labels)
         return self.predict(training_data)
     
     def predict(self, test_data):
@@ -55,9 +61,6 @@ class SVM(object):
         Returns:
             pred_labels (array): labels of shape (N,)
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+        # We use our svm to predict the right labels
+        pred_labels = self.svm.predict(test_data)
         return pred_labels
