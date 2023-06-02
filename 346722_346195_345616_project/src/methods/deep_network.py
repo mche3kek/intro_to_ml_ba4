@@ -24,11 +24,6 @@ class MLP(nn.Module):
             n_classes (int): number of classes to predict
         """
         super(MLP, self).__init__()
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
         self.fc1 = nn.Linear(input_size, 243)
         self.do1 = nn.Dropout(p=0.5)
         self.fc2 = nn.Linear(243, 81)
@@ -59,11 +54,6 @@ class MLP(nn.Module):
             preds (tensor): logits of predictions of shape (N, C)
                 Reminder: logits are value pre-softmax.
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
         x = F.selu(self.fc1(x))
         x = self.do1(x)
         x = F.relu(self.fc2(x))
@@ -105,14 +95,10 @@ class CNN(nn.Module):
             n_classes (int): number of classes to predict
         """
         super(CNN, self).__init__()
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+
         self.conv2d1 = nn.Conv2d(input_channels, 16, 3, padding=1)
         self.conv2d2 = nn.Conv2d(16, 32, 3, padding=1)
-        self.fc1 = nn.Linear(8 * 8 * 16, 120)
+        self.fc1 = nn.Linear(8 * 8 * 32, 120)
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, n_classes)
         
@@ -126,11 +112,6 @@ class CNN(nn.Module):
             preds (tensor): logits of predictions of shape (N, C)
                 Reminder: logits are value pre-softmax.
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
 
         x = F.max_pool2d(F.relu(self.conv2d1(x)), 2)
         x = F.max_pool2d(F.relu(self.conv2d2(x)), 2)
@@ -165,7 +146,7 @@ class Trainer(object):
         self.batch_size = batch_size
 
         self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = torch.optim.ASGD(self.model.parameters(), lr=self.lr, weight_decay=0.0003)
+        self.optimizer = torch.optim.Adam(self.model.parameters(), lr=self.lr)
 
     def train_all(self, dataloader):
         """
@@ -195,12 +176,12 @@ class Trainer(object):
         self.model.train()
         for it, batch in enumerate(dataloader):
             # 5.1 Load a batch, break it down in images and targets.
-            x, _, z = batch
+            x, z = batch
             
             # 5.2 Run forward pass.
-            logits = self.model.forward(x)
+            logits = self.model(x)
             # 5.3 Compute loss (using 'criterion').
-            loss = self.classification_criterion(logits, z)
+            loss = self.criterion(logits, z.long())
             
             # 5.4 Run backward pass.
             loss.backward()
@@ -231,11 +212,10 @@ class Trainer(object):
         self.model.eval()
         pred_labels = torch.empty(0)
         with torch.no_grad():
-            acc_run = 0
             for it, batch in enumerate(dataloader):
                 # Get batch of data.
-                x, _, z = batch
-                pred = torch.argmax(self.model(x), dim=1)
+                x = batch
+                pred = torch.argmax(self.model(x[0]), dim=1)
                 pred_labels = torch.cat((pred_labels, pred), 0)
         return pred_labels
     
