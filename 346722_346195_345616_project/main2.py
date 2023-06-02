@@ -29,8 +29,6 @@ def main(args):
     #  normalize, add bias, etc.
 
     xtrain = normalize_fn(xtrain, np.mean(xtrain, axis=0), np.std(xtrain, axis=0))
-    xtrain = append_bias_term(xtrain)
-
 
     # Make a validation set
     if not args.test:
