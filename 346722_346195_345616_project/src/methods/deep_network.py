@@ -66,12 +66,17 @@ class CNN(nn.Module):
             input_channels (int): number of channels in the input
             n_classes (int): number of classes to predict
         """
-        super().__init__()
+        super(CNN, self).__init__()
         ##
         ###
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        self.conv2d1 = nn.Conv2d(input_channels, 16, 3, padding=1)
+        self.conv2d2 = nn.Conv2d(16, 32, 3, padding=1)
+        self.fc1 = nn.Linear(8 * 8 * 16, 120)
+        self.fc2 = nn.Linear(120, 84)
+        self.fc3 = nn.Linear(84, n_classes)
         
     def forward(self, x):
         """
@@ -88,6 +93,14 @@ class CNN(nn.Module):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+
+        x = F.max_pool2d(F.relu(self.conv2d1(x)), 2)
+        x = F.max_pool2d(F.relu(self.conv2d2(x)), 2)
+        x = x.reshape((x.shape[0], -1))
+        x = F.relu(self.fc1(x))
+        x = F.relu(self.fc2(x))
+        preds = self.fc3(x)
+
         return preds
 
 
@@ -114,7 +127,7 @@ class Trainer(object):
         self.batch_size = batch_size
 
         self.criterion = nn.CrossEntropyLoss()
-        self.optimizer = ...  ### WRITE YOUR CODE HERE
+        self.optimizer = torch.optim.ASGD(self.model.parameters(), lr=self.lr, weight_decay=0.0003)
 
     def train_all(self, dataloader):
         """
@@ -141,11 +154,24 @@ class Trainer(object):
         Arguments:
             dataloader (DataLoader): dataloader for training data
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+        self.model.train()
+        for it, batch in enumerate(dataloader):
+            # 5.1 Load a batch, break it down in images and targets.
+            x, _, z = batch
+            
+            # 5.2 Run forward pass.
+            logits = self.model.forward(x)
+            # 5.3 Compute loss (using 'criterion').
+            loss = self.classification_criterion(logits, z)
+            
+            # 5.4 Run backward pass.
+            loss.backward()
+            
+            # 5.5 Update the weights using optimizer.
+            self.optimizer.step()
+            
+            # 5.6 Zero-out the accumulated gradients.
+            self.optimizer.zero_grad()
 
     def predict_torch(self, dataloader):
         """
@@ -164,11 +190,15 @@ class Trainer(object):
             pred_labels (torch.tensor): predicted labels of shape (N,),
                 with N the number of data points in the validation/test data.
         """
-        ##
-        ###
-        #### WRITE YOUR CODE HERE! 
-        ###
-        ##
+        self.model.eval()
+        pred_labels = torch.empty(0)
+        with torch.no_grad():
+            acc_run = 0
+            for it, batch in enumerate(dataloader):
+                # Get batch of data.
+                x, _, z = batch
+                pred = torch.argmax(self.model(x), dim=1)
+                pred_labels = torch.cat((pred_labels, pred), 0)
         return pred_labels
     
     def fit(self, training_data, training_labels):
