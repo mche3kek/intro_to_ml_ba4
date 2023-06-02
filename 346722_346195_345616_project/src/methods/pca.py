@@ -38,9 +38,11 @@ class PCA(object):
         Returns:
             exvar (float): explained variance of the kept dimensions (in percentage, i.e., in [0,100])
         """
+        # We compute the mean of our dataset and we center it 
         self.mean = np.mean(training_data, 0)
         centered_data = training_data - self.mean
 
+        # We compute the eigenvalues and eigenvectors of our dataset, which are used to find its principal components
         eigvals, eigvecs = np.linalg.eigh((centered_data.T@centered_data)/training_data.shape[0])
 
         eigvals = eigvals[::-1]
@@ -62,7 +64,7 @@ class PCA(object):
         Returns:
             data_reduced (array): reduced data of shape (N,d)
         """
-        
-        data_reduced = (data - self.mean)@self.W
+        # We reduce the dimensionality of our data using the computed mean and principal components
+        data_reduced = (data - self.mean) @ self.W
         return data_reduced
         

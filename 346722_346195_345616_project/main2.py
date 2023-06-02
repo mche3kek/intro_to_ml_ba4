@@ -1,6 +1,7 @@
 import argparse
 
 import numpy as np
+import time
 from torchinfo import summary
 
 from src.data import load_data
@@ -40,16 +41,15 @@ def main(args):
         ytest = ytrain[random_idx[:k]]
         xtrain = xtrain[random_idx[k:]]
         ytrain = ytrain[random_idx[k:]]
-    
-    ### WRITE YOUR CODE HERE to do any other data processing
-
 
     # Dimensionality reduction (MS2)
     if args.use_pca:
-        print("Using PCA")
-        pca_obj = PCA(d=args.pca_d)
+        # We reshape our data to vectors
         xtrain = xtrain.reshape(xtrain.shape[0], -1)
         xtest = xtest.reshape(xtest.shape[0], -1)
+        # We initialize our PCA object and reduce the dimensionality
+        pca_obj = PCA(d=args.pca_d)
+        print("Using PCA")
         pca_obj.find_principal_components(xtrain)
         xtrain = pca_obj.reduce_dimension(xtrain)
         xtest = pca_obj.reduce_dimension(xtest)
@@ -61,15 +61,14 @@ def main(args):
         print("Using deep network")
 
         # Prepare the model (and data) for Pytorch
-        # Note: you might need to reshape the image data depending on the network you use!
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
-            model = MLP(input_size= xtrain.shape[1], n_classes= n_classes)  ### WRITE YOUR CODE HERE
+            model = MLP(input_size= xtrain.shape[1], n_classes= n_classes)  
+            # We reshape our data to vectors as it is MLP's input type
             xtrain = xtrain.reshape(xtrain.shape[0], -1)
             xtest = xtest.reshape(xtest.shape[0], -1)
 
         elif args.nn_type == "cnn":
-            ### WRITE YOUR CODE HERE
             model = CNN(input_channels= xtrain.shape[1], n_classes= n_classes)
         
         summary(model)
@@ -84,11 +83,13 @@ def main(args):
 
     ## 4. Train and evaluate the method
 
+    t2 = time.time()
     # Fit (:=train) the method on the training data
     preds_train = method_obj.fit(xtrain, ytrain)
         
     # Predict on unseen data
     preds = method_obj.predict(xtest)
+    t1 = time.time()
 
 
     ## Report results: performance on train and valid/test sets
@@ -99,6 +100,9 @@ def main(args):
     acc = accuracy_fn(preds, ytest)
     macrof1 = macrof1_fn(preds, ytest)
     print(f"Test set:  accuracy = {acc:.3f}% - F1-score = {macrof1:.6f}")
+
+    # We measure the time taken to train and evaluate our algorithm
+    print(f"Time = {t1 - t2:.3f}")
 
     ### WRITE YOUR CODE HERE if you want to add other outputs, visualization, etc.
 
