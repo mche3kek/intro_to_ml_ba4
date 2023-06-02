@@ -20,9 +20,9 @@ class PCA(object):
         """
         self.d = d
         
-        # the mean of the training data (will be computed from the training data and saved to this variable)
+        # The mean of the training data (will be computed from the training data and saved to this variable)
         self.mean = None 
-        # the principal components (will be computed from the training data and saved to this variable)
+        # The principal components (will be computed from the training data and saved to this variable)
         self.W = None
 
     def find_principal_components(self, training_data):
@@ -64,6 +64,5 @@ class PCA(object):
         """
         
         data_reduced = (data - self.mean)@self.W
-
         return data_reduced
         

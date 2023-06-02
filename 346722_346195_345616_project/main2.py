@@ -48,12 +48,11 @@ def main(args):
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
-        pca_obj.find_principal_components(train_data)
-        train_data = pca_obj.reduce_dimension(train_data)
-        test_data = pca_obj.reduce_dimension(test_data)
         xtrain = xtrain.reshape(xtrain.shape[0], -1)
         xtest = xtest.reshape(xtest.shape[0], -1)
-
+        pca_obj.find_principal_components(xtrain)
+        xtrain = pca_obj.reduce_dimension(xtrain)
+        xtest = pca_obj.reduce_dimension(xtest)
 
     ## 3. Initialize the method you want to use.
 
