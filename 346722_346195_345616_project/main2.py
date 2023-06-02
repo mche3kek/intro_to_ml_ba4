@@ -63,11 +63,11 @@ def main(args):
         # Note: you might need to reshape the image data depending on the network you use!
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
-            model = ...  ### WRITE YOUR CODE HERE
+            model = MLP(input_size= xtrain.shape[0], n_classes= n_classes)  ### WRITE YOUR CODE HERE
 
         elif args.nn_type == "cnn":
             ### WRITE YOUR CODE HERE
-            ...
+            model = CNN(input_channels=1, n_classes= n_classes)
         
         summary(model)
 
