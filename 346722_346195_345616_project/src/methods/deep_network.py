@@ -8,7 +8,7 @@ from torch.utils.data import TensorDataset, DataLoader
 class MLP(nn.Module):
     """
     An MLP network which does classification.
-
+(disclaimer: aucune guarantie que ces notes soient justes)
     It should not use any convolutional layers.
     """
 
@@ -23,12 +23,31 @@ class MLP(nn.Module):
             input_size (int): size of the input
             n_classes (int): number of classes to predict
         """
-        super().__init__()
+        super(MLP, self).__init__()
         ##
         ###
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        self.fc1 = nn.Linear(input_size, 243)
+        self.do1 = nn.Dropout(p=0.5)
+        self.fc2 = nn.Linear(243, 81)
+        self.do2 = nn.Dropout(p=0.5)
+        self.fc3 = nn.Linear(81, 27)
+        self.do3 = nn.Dropout(p=0.5)
+        self.fc4 = nn.Linear(27, 9)
+        self.do4 = nn.Dropout(p=0.5)
+        self.fc5 = nn.Linear(9, 8)
+        self.do5 = nn.Dropout(p=0.1665)
+        self.fc6 = nn.Linear(8, 16)
+        self.do6 = nn.Dropout(p=0.333)
+        self.fc7 = nn.Linear(16, 32)
+        self.do7 = nn.Dropout(p=0.333)
+        self.fc8 = nn.Linear(32, 64)
+        self.do8 = nn.Dropout(p=0.333)
+        self.fc9 = nn.Linear(64, 128)
+        self.do9 = nn.Dropout(p=0.333)
+        self.fc10 = nn.Linear(128, n_classes)
         
     def forward(self, x):
         """
@@ -45,6 +64,25 @@ class MLP(nn.Module):
         #### WRITE YOUR CODE HERE! 
         ###
         ##
+        x = F.selu(self.fc1(x))
+        x = self.do1(x)
+        x = F.relu(self.fc2(x))
+        x = self.do2(x)
+        x = F.relu(self.fc3(x))
+        x = self.do3(x)
+        x = F.relu(self.fc4(x))
+        x = self.do4(x)
+        x = F.relu(self.fc5(x))
+        x = self.do5(x)
+        x = F.relu(self.fc6(x))
+        x = self.do6(x)
+        x = F.relu(self.fc7(x))
+        x = self.do7(x)
+        x = F.relu(self.fc8(x))
+        x = self.do8(x)
+        x = self.fc9(x)
+        x = self.do9(x)
+        preds = self.fc10(x)
         return preds
 
 
