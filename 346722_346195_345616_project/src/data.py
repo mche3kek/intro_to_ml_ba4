@@ -32,6 +32,7 @@ def load_data(directory):
 
     return train_images, test_images, train_labels, test_labels
 
+
 if __name__ == "__main__":
     print('Testing data loading...')
 

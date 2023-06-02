@@ -14,7 +14,7 @@ class DummyClassifier(object):
         The arguments can be used to correctly initialize it.
 
         Arguments:
-            arg1: Seoulhon
+            arg1: 
                 Some dummy argument. As it has no default values, it needs to be given.
             arg2: int (default=0)
                 Some dummy argument. As it has a default value, it is optional.
