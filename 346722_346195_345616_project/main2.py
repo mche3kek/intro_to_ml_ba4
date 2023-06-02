@@ -60,6 +60,8 @@ def main(args):
         # Prepare the model (and data) for Pytorch
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
+            xtrain = xtrain.reshape(xtrain.shape[0], -1)
+            xtest = xtest.reshape(xtest.shape[0], -1)
             model = MLP(input_size= xtrain.shape[1], n_classes= n_classes)  
             # We reshape our data to vectors as it is MLP's input type
             xtrain = xtrain.reshape(xtrain.shape[0], -1)
