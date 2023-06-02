@@ -51,6 +51,8 @@ def main(args):
         pca_obj.find_principal_components(train_data)
         train_data = pca_obj.reduce_dimension(train_data)
         test_data = pca_obj.reduce_dimension(test_data)
+        xtrain = xtrain.reshape(xtrain.shape[0], -1)
+        xtest = xtest.reshape(xtest.shape[0], -1)
 
 
     ## 3. Initialize the method you want to use.
@@ -63,15 +65,13 @@ def main(args):
         # Note: you might need to reshape the image data depending on the network you use!
         n_classes = get_n_classes(ytrain)
         if args.nn_type == "mlp":
-            model = MLP(input_size= xtrain.shape[0], n_classes= n_classes)  ### WRITE YOUR CODE HERE
+            model = MLP(input_size= xtrain.shape[1], n_classes= n_classes)  ### WRITE YOUR CODE HERE
+            xtrain = xtrain.reshape(xtrain.shape[0], -1)
+            xtest = xtest.reshape(xtest.shape[0], -1)
 
         elif args.nn_type == "cnn":
             ### WRITE YOUR CODE HERE
-            model = CNN(input_channels=1, n_classes= n_classes)
-            xtrain = xtrain.reshape(xtrain.shape[0], 1, xtrain.shape[1], xtrain.shape[2])
-            xtest = xtest.reshape(xtest.shape[0], 1, xtest.shape[1], xtest.shape[2])
-            ytrain = ytrain.reshape(ytrain.shape[0], 1, ytrain.shape[1], ytrain.shape[2])
-            ytest = ytest.reshape(ytest.shape[0], 1, ytest.shape[1], ytest.shape[2])
+            model = CNN(input_channels= xtrain.shape[1], n_classes= n_classes)
         
         summary(model)
 
