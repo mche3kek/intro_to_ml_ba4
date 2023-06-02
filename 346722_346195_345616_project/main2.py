@@ -28,10 +28,20 @@ def main(args):
     ## 2. Then we must prepare it. This is were you can create a validation set,
     #  normalize, add bias, etc.
 
+    xtrain = normalize_fn(xtrain, np.mean(xtrain, axis=0), np.std(xtrain, axis=0))
+    xtrain = append_bias_term(xtrain)
+
+
     # Make a validation set
     if not args.test:
-        ### WRITE YOUR CODE HERE
-        pass
+        # We use 30% of our training set to make our validation set
+        k = int(0.3 * xtrain.shape[0])
+        random_idx = np.random.permutation(xtrain.shape[0])
+        # Use these index to extract our validation set from the training set
+        xtest = xtrain[random_idx[:k]]
+        ytest = ytrain[random_idx[:k]]
+        xtrain = xtrain[random_idx[k:]]
+        ytrain = ytrain[random_idx[k:]]
     
     ### WRITE YOUR CODE HERE to do any other data processing
 
@@ -40,7 +50,9 @@ def main(args):
     if args.use_pca:
         print("Using PCA")
         pca_obj = PCA(d=args.pca_d)
-        ### WRITE YOUR CODE HERE: use the PCA object to reduce the dimensionality of the data
+        pca_obj.find_principal_components(train_data)
+        train_data = pca_obj.reduce_dimension(train_data)
+        test_data = pca_obj.reduce_dimension(test_data)
 
 
     ## 3. Initialize the method you want to use.
