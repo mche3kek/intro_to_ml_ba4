@@ -68,6 +68,10 @@ def main(args):
         elif args.nn_type == "cnn":
             ### WRITE YOUR CODE HERE
             model = CNN(input_channels=1, n_classes= n_classes)
+            xtrain = xtrain.reshape(xtrain.shape[0], 1, xtrain.shape[1], xtrain.shape[2])
+            xtest = xtest.reshape(xtest.shape[0], 1, xtest.shape[1], xtest.shape[2])
+            ytrain = ytrain.reshape(ytrain.shape[0], 1, ytrain.shape[1], ytrain.shape[2])
+            ytest = ytest.reshape(ytest.shape[0], 1, ytest.shape[1], ytest.shape[2])
         
         summary(model)
 
